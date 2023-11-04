@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-import Registration from "../Models/Model.registration.js";
 
 const maillink = async (resetdata) => {
   let mailTransporter = nodemailer.createTransport({

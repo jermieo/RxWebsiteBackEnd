@@ -24,7 +24,7 @@ export const registerUser = async (req, res) => {
     if (getdata) {
       res
         .status(201)
-        .json({ error: "Register failed.., alredy this mail registered" });
+        .json({ message: "Register failed.., alredy this mail registered" });
     } else {
       await newregistration.save();
       res.status(200).json({
@@ -82,24 +82,28 @@ export const resetpassword = async (req, res) => {
   try {
     const data = req.body;
     const update = await Registration.updateOne(
-      { email: data.email },
+      { gmail: data.gmail },
       {
         $set: { password: data.password },
         confirmpassword: data.confirmpassword,
       }
     );
     const get = await Registration.findOne({ gmail: data.gmail });
-    const hashPassword = await bcrypt.hash(get.password, 10);
-    const updatesHashPassword = await Registration.updateOne(
-      { gmail: get.gmail },
-      {
-        $set: { gmail: get.gmail },
-        password: hashPassword,
-        confirmpassword: hashPassword,
+    if (get) {
+      const hashPassword = await bcrypt.hash(get.password, 10);
+      const updatesHashPassword = await Registration.updateOne(
+        { gmail: get.gmail },
+        {
+          $set: { gmail: get.gmail },
+          password: hashPassword,
+          confirmpassword: hashPassword,
+        }
+      );
+      if (updatesHashPassword.modifiedCount == 1) {
+        res.status(200).json({ message: "password  reset successfully" });
       }
-    );
-    if (updatesHashPassword.modifiedCount == 1) {
-      res.status(200).json({ message: "password  reset successfully" });
+    } else {
+      res.status(201).json({ message: "Please Enter registered email" });
     }
   } catch (error) {
     res.status(500).json({ error: "password  reset failed , internal error" });
