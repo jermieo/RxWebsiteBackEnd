@@ -6,6 +6,26 @@ import mail from "../Services/Nodemailer.js";
 import maillink from "../Services/NodemailerResetlink.js";
 dotenv.config();
 
+// Get data Profile Details
+export const getdata = async (req, res) => {
+  try {
+    const headtocken = req.user;
+    const user = await Registration.findById(headtocken);
+    if (!user) {
+      res.status(201).json({ message: "user details not Found" });
+    }
+    const userdetails = {
+      firstname: user.firstname,
+      lastname: user.lastname,
+      gmail: user.gmail,
+    };
+    res
+      .status(200)
+      .json({ message: "user details get Successfully", userdetails });
+  } catch (error) {
+    res.status(500).json({ error: "get by id  failed , internal error" });
+  }
+};
 //Create Registration
 export const registerUser = async (req, res) => {
   try {
