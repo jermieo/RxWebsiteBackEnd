@@ -18,6 +18,13 @@ export const getdata = async (req, res) => {
       firstname: user.firstname,
       lastname: user.lastname,
       gmail: user.gmail,
+      address1: user.address1,
+      address2: user.address2,
+      country: user.country,
+      state: user.state,
+      city: user.city,
+      mobileNumber: user.mobileNumber,
+      language: user.language,
     };
     res
       .status(200)
@@ -127,5 +134,46 @@ export const resetpassword = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "password  reset failed , internal error" });
+  }
+};
+// Profile  Update
+export const profileUpdate = async (req, res) => {
+  try {
+    const previousId = req.user;
+    const data = req.body.forms;
+    const user = await Registration.findById(previousId);
+    if (!user) {
+      res.status(201).json({ message: "user details not Found" });
+    }
+    const update = await Registration.updateOne(
+      { gmail: user.gmail },
+      {
+        $set: { address1: data.address1 },
+        address2: data.address2,
+        country: data.country,
+        state: data.state,
+        city: data.city,
+        language: data.language,
+        mobileNumber: data.mobileNumber,
+      }
+    );
+    if (update.modifiedCount === 1) {
+      const userdata = await Registration.findById(previousId);
+      const data = {
+        firstname: userdata.firstname,
+        lastname: userdata.lastname,
+        gmail: userdata.gmail,
+        address1: userdata.address1,
+        address2: userdata.address2,
+        country: userdata.country,
+        state: userdata.state,
+        city: userdata.city,
+        mobileNumber: userdata.mobileNumber,
+        language: userdata.language,
+      };
+      res.status(200).json({ message: "Profile Update successfully", data });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Profile , internal error" });
   }
 };

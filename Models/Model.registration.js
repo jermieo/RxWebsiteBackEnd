@@ -6,6 +6,13 @@ const registrationSchema = new mongoose.Schema({
   gmail: String,
   password: String,
   confirmpassword: String,
+  address1: String,
+  address2: String,
+  country: String,
+  state: String,
+  city: String,
+  language: String,
+  mobileNumber: Number,
 });
 
 const Registration = mongoose.model("Registration", registrationSchema);

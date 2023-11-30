@@ -5,8 +5,10 @@ import {
   nodemailerLink,
   resetpassword,
   getdata,
+  profileUpdate,
 } from "../Controller/Controller.registration.js";
-import authMiddleware from "../Middleware/auth.Middleware.js";
+import authMiddlewareGetdata from "../Middleware/auth.Middleware.js";
+import authMiddlewareUpdatedata from "../Middleware/auth.Profile.js";
 
 const router = express.Router();
 // Create Registration
@@ -18,6 +20,8 @@ router.post("/reset/password", nodemailerLink);
 // ResetPassword
 router.put("/update", resetpassword);
 // get UserData
-router.post("/get/Profiledata", authMiddleware, getdata);
+router.post("/get/Profiledata", authMiddlewareGetdata, getdata);
+// update Profile
+router.put("/update/profile", authMiddlewareUpdatedata, profileUpdate);
 
 export default router;

@@ -2,8 +2,9 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 dotenv.config();
-// get data check jwt token
-const authMiddlewareGetdata = (req, res, next) => {
+
+// update data check jwt token
+const authMiddlewareUpdatedata = (req, res, next) => {
   const token = req.body.token;
   if (!token) {
     return res.status(401).json({ error: "Token is missing" });
@@ -16,4 +17,5 @@ const authMiddlewareGetdata = (req, res, next) => {
     res.status(500).json({ error: "invalid token" });
   }
 };
-export default authMiddlewareGetdata;
+
+export default authMiddlewareUpdatedata;
